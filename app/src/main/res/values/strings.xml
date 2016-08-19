@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Kancolle</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="stop_service">Stop Service</string>
+    <string name="start_service">Start Service</string>
+
+
+    <string-array name="Kanmusu">
+        <item>Haruna</item>
+        <item>Kongo</item>
+        <item>Ayanami</item>
+        <item>Shigure</item>
+        <item>Akatsuki</item>
+        <item>Harusame</item>
+        <item>Hibiki</item>
+        <item>Warspite</item>
+    </string-array>
+
+</resources>

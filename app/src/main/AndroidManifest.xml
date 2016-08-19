@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="yipuwang.kancolle">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <receiver
+            android:name=".KancolleAlarmReceiver"
+            android:process=":remote" />
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:process=":hour_voice"></service>
+        <service
+            android:name=".RestService"
+            android:enabled="true"
+            android:process=":rest_voice"
+            android:exported="false"></service>
+    </application>
+
+</manifest>
