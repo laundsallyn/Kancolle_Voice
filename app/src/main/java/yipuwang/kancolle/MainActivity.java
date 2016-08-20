@@ -72,29 +72,27 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
     private int[] getResourceID (Character name){
         int[] rid = new int[24];
         SharedPreferences.Editor editor = settings.edit();
-
+        String pat = name.name().toLowerCase();
+        String hourS = "("+ pat+ ")(\\d*)";
+        String startS = pat+"_set";
+        String stopS = pat +"_stop_service";
+        String restS = pat+ "_rest";
         Pattern hour_pattern, start_pattern,stop_pattern,rest_pattern;
+        hour_pattern = Pattern.compile(hourS);
+        start_pattern = Pattern.compile(startS);
+        stop_pattern = Pattern.compile(stopS);
+        rest_pattern = Pattern.compile(restS);
         switch(name){
             case HARUNA:
-                hour_pattern = Pattern.compile("(haruna)(\\d*)");
-                start_pattern = Pattern.compile("haruna_set");
-                stop_pattern = Pattern.compile("haruna_stop_service");
-                rest_pattern = Pattern.compile("haruna_rest");
-
                 portraitID = R.drawable.haruna_portrait;
                 break;
             case KONGO:
-                hour_pattern = Pattern.compile("(kongo)(\\d*)");
-                start_pattern = Pattern.compile("kongo_set");
-                stop_pattern = Pattern.compile("kongo_stop_service");
-                rest_pattern = Pattern.compile("kongo_rest");
                 portraitID = R.drawable.kongo_portrait;
                 break;
+            case AYANAMI:
+                portraitID = R.drawable.ayanami_portrait;
+                break;
             default:
-                hour_pattern = Pattern.compile("(haruna)(\\d*)");
-                start_pattern = Pattern.compile("haruna_set");
-                stop_pattern = Pattern.compile("haruna_stop_service");
-                rest_pattern = Pattern.compile("haruna_rest");
 
         }
         Class raw = R.raw.class;

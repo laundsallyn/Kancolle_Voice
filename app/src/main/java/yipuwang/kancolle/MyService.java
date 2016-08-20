@@ -48,7 +48,7 @@ public class MyService extends Service {
         Calendar next = new GregorianCalendar(cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY)+1,0);
         if(!first)
-            new KancolleThread(this,rid[cal.get(Calendar.HOUR_OF_DAY)+1]).run();
+            new KancolleThread(this,rid[cal.get(Calendar.HOUR_OF_DAY)]).run();
 
         //--------------- for debugging purpose -----------------------
 //        Calendar debug = new GregorianCalendar(cal.get(Calendar.YEAR),
