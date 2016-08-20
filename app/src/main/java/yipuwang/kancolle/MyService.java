@@ -34,31 +34,31 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(first){
             rid = intent.getIntArrayExtra("hour_voice_rid");
-            first = false;
         }
         Log.d(TAG, "Executing mainFunctionality");
         hourVoice();
-        return super.onStartCommand(intent, flags, startId);
+        if(first)
+            first = false;
+        return START_NOT_STICKY;
     }
     private void hourVoice(){
-        SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+//        SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
         Calendar cal = new GregorianCalendar();
-        Log.d("In MyService", "Current time: "+cal.get(Calendar.HOUR)+": "+cal.get(Calendar.MINUTE)+": "+ cal.get(Calendar.SECOND));
-        Toast.makeText(this, "Current time: "+cal.get(Calendar.HOUR)+": "+cal.get(Calendar.MINUTE)+": "+ cal.get(Calendar.SECOND), Toast.LENGTH_LONG).show();
-
-//        Calendar next = new GregorianCalendar(cal.get(Calendar.YEAR),
-//                cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY)+1,0);
-//        new KancolleThread(this,rid[cal.get(Calendar.HOUR)+1]).run();
+        Log.d("In MyService", "Current time: "+cal.get(Calendar.HOUR_OF_DAY)+": "+cal.get(Calendar.MINUTE)+": "+ cal.get(Calendar.SECOND));
+        Calendar next = new GregorianCalendar(cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY)+1,0);
+        if(!first)
+            new KancolleThread(this,rid[cal.get(Calendar.HOUR_OF_DAY)+1]).run();
 
         //--------------- for debugging purpose -----------------------
-        Calendar debug = new GregorianCalendar(cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE)+2);
-        int id = rid[cal.get(Calendar.HOUR_OF_DAY)];
-        int prefID = settings.getInt(""+cal.get(Calendar.HOUR_OF_DAY),0);
-        if (id != prefID)
-            Log.d(TAG,"ID = "+id+", prefID = "+prefID);
-        new KancolleThread(this,rid[cal.get(Calendar.HOUR_OF_DAY)]).run();
-        Log.d(TAG,"HOUR: "+cal.get(Calendar.HOUR)+" HOUR_OF_DAY: "+cal.get(Calendar.HOUR_OF_DAY));
+//        Calendar debug = new GregorianCalendar(cal.get(Calendar.YEAR),
+//                cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE)+2);
+//        int id = rid[cal.get(Calendar.HOUR_OF_DAY)];
+//        int prefID = settings.getInt(""+cal.get(Calendar.HOUR_OF_DAY),0);
+//        if (id != prefID)
+//            Log.d(TAG,"ID = "+id+", prefID = "+prefID);
+//        new KancolleThread(this,rid[cal.get(Calendar.HOUR_OF_DAY)]).run();
+//        Log.d(TAG,"HOUR: "+cal.get(Calendar.HOUR)+" HOUR_OF_DAY: "+cal.get(Calendar.HOUR_OF_DAY));
         //-------------------------------------------------------------
 
         manager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -66,10 +66,10 @@ public class MyService extends Service {
         pi = PendingIntent.getBroadcast(this, 0, i, 0);
 
 
-//        manager.set(AlarmManager.RTC_WAKEUP,next.getTimeInMillis(),pi);
+        manager.set(AlarmManager.RTC_WAKEUP,next.getTimeInMillis(),pi);
 
         //--------------- for debugging purpose -----------------------
-        manager.set(AlarmManager.RTC_WAKEUP,debug.getTimeInMillis(),pi);
+//        manager.set(AlarmManager.RTC_WAKEUP,debug.getTimeInMillis(),pi);
         //-------------------------------------------------------------
 
     }

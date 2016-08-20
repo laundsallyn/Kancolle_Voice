@@ -38,7 +38,7 @@ public class RestService extends Service {
         }
         Log.d(TAG, "Executing restVoice");
         restVoice();
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
     private void restVoice(){
         Calendar cal = new GregorianCalendar();
