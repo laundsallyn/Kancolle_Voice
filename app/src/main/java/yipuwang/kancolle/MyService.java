@@ -32,10 +32,8 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(first){
+        if(first)
             rid = intent.getIntArrayExtra("hour_voice_rid");
-        }
-        Log.d(TAG, "Executing mainFunctionality");
         hourVoice();
         if(first)
             first = false;
@@ -64,7 +62,6 @@ public class MyService extends Service {
         manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent i = new Intent(this,KancolleAlarmReceiver.class);
         pi = PendingIntent.getBroadcast(this, 0, i, 0);
-
 
         manager.set(AlarmManager.RTC_WAKEUP,next.getTimeInMillis(),pi);
 

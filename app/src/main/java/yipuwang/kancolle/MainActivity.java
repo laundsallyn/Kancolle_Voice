@@ -158,9 +158,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             startService(hour_service);
 
 
-//            Intent rest_service = new Intent(con, RestService.class);
-//            rest_service.putExtra("restRid", restRid);
-//            startService(rest_service);
+            Intent rest_service = new Intent(con, RestService.class);
+            rest_service.putExtra("restRid", restRid);
+            startService(rest_service);
             start.setEnabled(false);
             stop.setEnabled(true);
         }
@@ -187,7 +187,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             stop.setEnabled(false);
             img.setImageResource(R.drawable.blank);
             stopService(new Intent(con, MyService.class));
-//            stopService(new Intent(con, RestService.class));
+            stopService(new Intent(con, RestService.class));
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.clear();
