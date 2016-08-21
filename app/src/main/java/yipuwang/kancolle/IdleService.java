@@ -12,17 +12,17 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-public class RestService extends Service {
+public class IdleService extends Service {
     private static boolean first = true;
     private int restRid;
-    private String TAG = "In RestService";
+    private String TAG = "In IdleService";
     private AlarmManager manager;
     private PendingIntent pi;
 
 
     @Override
     public void onCreate() {
-        Log.d(TAG,"RestService Fired");
+        Log.d(TAG,"IdleService Fired");
         super.onCreate();
     }
 
@@ -44,10 +44,10 @@ public class RestService extends Service {
     }
     private void restVoice(){
         Calendar cal = new GregorianCalendar();
-        Log.d("In RestService", "Current time: "+cal.get(Calendar.HOUR_OF_DAY)+": "+cal.get(Calendar.MINUTE)+": "+ cal.get(Calendar.SECOND));
+        Log.d("In IdleService", "Current time: "+cal.get(Calendar.HOUR_OF_DAY)+": "+cal.get(Calendar.MINUTE)+": "+ cal.get(Calendar.SECOND));
         Random ran = new Random();
         Calendar c = new GregorianCalendar(cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE)+10);
+                cal.get(Calendar.MONTH),cal.get(Calendar.DATE),cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE)+10-ran.nextInt(4));
         if(!first)
             new KancolleThread(this,restRid).run();
         manager = (AlarmManager) getSystemService(ALARM_SERVICE);

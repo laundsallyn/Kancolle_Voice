@@ -10,7 +10,7 @@ import android.content.Intent;
 public class RestVoiceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent i = new Intent(context,RestService.class);
+        Intent i = new Intent(context,IdleService.class);
         context.startService(i);
     }
 }

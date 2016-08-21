@@ -33,7 +33,7 @@
             android:enabled="true"
             android:process=":hour_voice"></service>
         <service
-            android:name=".RestService"
+            android:name=".IdleService"
             android:enabled="true"
             android:process=":rest_voice"></service>
     </application>

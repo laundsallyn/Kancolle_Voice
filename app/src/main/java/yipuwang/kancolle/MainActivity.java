@@ -2,6 +2,7 @@ package yipuwang.kancolle;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.app.Activity;
@@ -13,10 +14,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +26,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
     public static final String PREFS_NAME = "MyPrefsFile";
     private static String TAG = "In MainActivity";
     private int[] hour_voice_rid;
+    private int[] touch_voice_rid;
     private Button start;
     private Button stop;
     private Character name;
@@ -39,6 +41,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         hour_voice_rid = new int[24];
+        touch_voice_rid = new int[3];
         setContentView(R.layout.activity_main);
         start = (Button) findViewById(R.id.start);
         stop = (Button) findViewById(R.id.stop);
@@ -67,21 +70,20 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         restRid = settings.getInt("startRid", 0);
         for(int i = 0; i < 24; i++)
             hour_voice_rid[i] = settings.getInt(""+i,0);
+        for(int i = 0; i < 3; i++)
+            touch_voice_rid[i] = settings.getInt("t"+i,0);
     }
 
     private int[] getResourceID (Character name){
         int[] rid = new int[24];
         SharedPreferences.Editor editor = settings.edit();
         String pat = name.name().toLowerCase();
-        String hourS = "("+ pat+ ")(\\d*)";
-        String startS = pat+"_set";
-        String stopS = pat +"_stop_service";
-        String restS = pat+ "_rest";
-        Pattern hour_pattern, start_pattern,stop_pattern,rest_pattern;
-        hour_pattern = Pattern.compile(hourS);
-        start_pattern = Pattern.compile(startS);
-        stop_pattern = Pattern.compile(stopS);
-        rest_pattern = Pattern.compile(restS);
+        Pattern hour_pattern, start_pattern,stop_pattern,rest_pattern,touch_pattern;
+        hour_pattern = Pattern.compile("("+ pat+ ")(\\d*)");
+        start_pattern = Pattern.compile(pat+"_set");
+        stop_pattern = Pattern.compile(pat +"_stop_service");
+        rest_pattern = Pattern.compile(pat+ "_idle");
+        touch_pattern = Pattern.compile("("+ pat+ ")_touch_(\\d*)");
         switch(name){
             case HARUNA:
                 portraitID = R.drawable.haruna_portrait;
@@ -92,8 +94,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             case AYANAMI:
                 portraitID = R.drawable.ayanami_portrait;
                 break;
+            case WARSPITE:
+                portraitID = R.drawable.warspite_portrait;
+                break;
             default:
-
+                portraitID = R.drawable.blank;
         }
         Class raw = R.raw.class;
         Field[] fields = raw.getFields();
@@ -104,27 +109,27 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
                 Matcher start = start_pattern.matcher(fileName);
                 Matcher stop = stop_pattern.matcher(fileName);
                 Matcher rest = rest_pattern.matcher(fileName);
-
-                boolean matchHour = matcher_hour.matches();
-                boolean matchStart = start.matches();
-                boolean matchStop = stop.matches();
-                boolean matchRest = rest.matches();
-
+                Matcher touch = touch_pattern.matcher(fileName);
                 // Log.d(TAG, " @@@@" + matcher.group(2));
-                if (matchHour) {
+                if (matcher_hour.matches()) {
                     int id = f.getInt(null);
                     int i = Integer.parseInt(matcher_hour.group(2));
                     rid[i] = id;
                     editor.putInt(""+i,id);
-                } else if (matchStart){
+                } else if (start.matches()){
                     startRid = f.getInt(null);
                     editor.putInt("startRid",startRid);
-                } else if (matchStop){
+                } else if (stop.matches()){
                     stopRid = f.getInt(null);
                     editor.putInt("stopRid",stopRid);
-                } else if (matchRest){
+                } else if (rest.matches()){
                     restRid = f.getInt(null);
                     editor.putInt("restRid",restRid);
+                }else if(touch.matches()){
+                    int id = f.getInt(null);
+                    int i = Integer.parseInt(touch.group(2));
+                    touch_voice_rid[i-1] = id;
+                    editor.putInt("t"+(i-1),id);
                 }
             } catch (Exception e) {
                 continue;
@@ -143,6 +148,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         public void onClick(View view){
             hour_voice_rid = getResourceID(name);
             img.setImageResource(portraitID);
+            img.setEnabled(true);
             int st = mSound.load(con,startRid,1);
             try{
                 Thread.sleep(1000);
@@ -158,7 +164,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             startService(hour_service);
 
 
-            Intent rest_service = new Intent(con, RestService.class);
+            Intent rest_service = new Intent(con, IdleService.class);
             rest_service.putExtra("restRid", restRid);
             startService(rest_service);
             start.setEnabled(false);
@@ -186,8 +192,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             start.setEnabled(true);
             stop.setEnabled(false);
             img.setImageResource(R.drawable.blank);
+            img.setEnabled(false);
             stopService(new Intent(con, MyService.class));
-            stopService(new Intent(con, RestService.class));
+            stopService(new Intent(con, IdleService.class));
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.clear();
@@ -202,5 +209,16 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
 
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
+    }
+    public void touchVoice(View view){
+        Random rand = new Random();
+        int i = rand.nextInt(3);
+        MediaPlayer mp = MediaPlayer.create(this,touch_voice_rid[i]);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        mp.start();
     }
 }

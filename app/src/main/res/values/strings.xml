@@ -12,10 +12,10 @@
         <item>Haruna</item>
         <item>Kongo</item>
         <item>Ayanami</item>
-        <item>Shigure</item>
-        <item>Akatsuki</item>
-        <item>Harusame</item>
-        <item>Hibiki</item>
+        <!--<item>Shigure</item>--> 
+        <!--<item>Akatsuki</item>-->
+        <item>Amatsukaze</item>
+        <!--<item>Hibiki</item>-->
         <item>Warspite</item>
     </string-array>
 
