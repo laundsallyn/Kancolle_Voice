@@ -97,6 +97,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             case WARSPITE:
                 portraitID = R.drawable.warspite_portrait;
                 break;
+            case AMATSUKAZE:
+                portraitID = R.drawable.amatsukaze_portrait;
+                break;
             default:
                 portraitID = R.drawable.blank;
         }

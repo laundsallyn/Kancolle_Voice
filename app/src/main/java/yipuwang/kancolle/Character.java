@@ -7,6 +7,7 @@ public enum Character {
     HARUNA, //("榛名"),
     KONGO, //("金剛"),
     AYANAMI,//("綾波"),
+    AMATSUKAZE,
     SHIGURE, //("時雨"),
     AKATSUKI,//("暁"),
     HARUSAME,//("春雨"),
