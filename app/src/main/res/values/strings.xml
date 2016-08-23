@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Kancolle</string>
+    <string name="app_name">Mobile Secretary Ship</string>
 
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="stop_service">Stop Service</string>
-    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop</string>
+    <string name="start_service">Start</string>
 
 
     <string-array name="Kanmusu">

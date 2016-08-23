@@ -15,20 +15,17 @@
         android:layout_height="wrap_content"
         android:text="@string/start_service"
         android:id="@+id/start"
-        android:layout_above="@+id/stop"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignTop="@+id/stop"
+        android:layout_alignStart="@+id/imageView" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stop_service"
         android:id="@+id/stop"
-        android:layout_marginBottom="26dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/start"
-        android:layout_alignStart="@+id/start"
-        android:layout_alignRight="@+id/start"
-        android:layout_alignEnd="@+id/start" />
+        android:layout_marginBottom="24dp"
+        android:layout_above="@+id/textView2"
+        android:layout_centerHorizontal="true" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -56,5 +53,24 @@
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="made by Laundsallyn, commercial use prohibited."
+        android:textSize="10dp"
+        android:id="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:id="@+id/exit"
+        android:onClick="quit"
+        android:layout_alignTop="@+id/stop"
+        android:layout_toEndOf="@+id/stop"
+        android:layout_marginStart="22dp" />
 
 </RelativeLayout>

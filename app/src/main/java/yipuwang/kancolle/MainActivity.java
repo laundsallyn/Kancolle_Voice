@@ -1,4 +1,6 @@
 package yipuwang.kancolle;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -7,6 +9,8 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,8 +31,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
     private static String TAG = "In MainActivity";
     private int[] hour_voice_rid;
     private int[] touch_voice_rid;
-    private Button start;
-    private Button stop;
+    private Button start,stop,exit;
     private Character name;
     private ImageView img;
     private int startRid, stopRid,restRid,portraitID;
@@ -45,6 +48,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         setContentView(R.layout.activity_main);
         start = (Button) findViewById(R.id.start);
         stop = (Button) findViewById(R.id.stop);
+        exit = (Button) findViewById(R.id.exit);
         start.setOnClickListener(new StartListener(this));
         stop.setOnClickListener(new StopListener(this));
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -169,17 +173,19 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             hour_service.putExtra("hour_voice_rid", hour_voice_rid);
             startService(hour_service);
 
-
+//            showNotification();
             Intent rest_service = new Intent(con, IdleService.class);
             rest_service.putExtra("restRid", restRid);
             startService(rest_service);
             start.setEnabled(false);
+            exit.setEnabled(false);
             stop.setEnabled(true);
         }
     }
 
     private class StopListener implements View.OnClickListener {
         private SoundPool mSound;
+        private NotificationManager man;
         Context con;
         public StopListener( Context con){
             this.con = con;
@@ -197,12 +203,14 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             }
             start.setEnabled(true);
             stop.setEnabled(false);
+            exit.setEnabled(true);
             img.setImageResource(R.drawable.blank);
             img.setEnabled(false);
             stopService(new Intent(con, MyService.class));
             stopService(new Intent(con, IdleService.class));
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
+//            man.cancel(12345);
             editor.clear();
         }
     }
@@ -226,5 +234,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             }
         });
         mp.start();
+    }
+
+    public void quit(View view){
+        this.finish();
+    }
+
+    public void showNotification(){
+        new MyNotification(this,name);
     }
 }
