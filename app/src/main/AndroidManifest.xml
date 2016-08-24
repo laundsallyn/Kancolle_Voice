@@ -25,7 +25,8 @@
             android:process=":remote" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleInstance">
         </activity>
 
         <service

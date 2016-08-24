@@ -1,4 +1,5 @@
 package yipuwang.kancolle;
+import android.app.FragmentManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -173,7 +174,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             hour_service.putExtra("hour_voice_rid", hour_voice_rid);
             startService(hour_service);
 
-//            showNotification();
+            showNotification();
             Intent rest_service = new Intent(con, IdleService.class);
             rest_service.putExtra("restRid", restRid);
             startService(rest_service);
@@ -188,6 +189,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
         private NotificationManager man;
         Context con;
         public StopListener( Context con){
+            man = (NotificationManager) con.getSystemService(Context.NOTIFICATION_SERVICE);
             this.con = con;
             mSound = new SoundPool(2, AudioManager.STREAM_MUSIC,0);
         }
@@ -210,7 +212,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
             stopService(new Intent(con, IdleService.class));
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
-//            man.cancel(12345);
+            man.cancel(12345);
             editor.clear();
         }
     }
@@ -237,7 +239,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemSelected
     }
 
     public void quit(View view){
-        this.finish();
+        FragmentManager fm = getFragmentManager();
+        QuitDialogFragment quitDialogFragment = new QuitDialogFragment();
+        quitDialogFragment.show(fm, "quit");
     }
 
     public void showNotification(){
