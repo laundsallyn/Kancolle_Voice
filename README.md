@@ -3,4 +3,5 @@ This is a fan based android app I made in Summer, 2016. I transported part of th
 It runs in background and provides hourly vocal message and idle message.
 It's a fun project, tested out by a few of my friend and will not be published due to copyright issue (secondary creation).
 
-下载地址： http://pan.baidu.com/s/1dFvcVmh 提取码：4fzi
+
+下载地址：Repo中的Kancolle Voice.apk或网盘：http://pan.baidu.com/s/1dFvcVmh 提取码：4fzi
